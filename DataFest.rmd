@@ -1,0 +1,57 @@
+---
+title: "DataFest RStudio Code"
+output: html_notebook
+---
+
+```{r}
+germ<-read.csv(file.choose())
+View(germ)
+```
+
+```{r}
+library(ggplot2)
+library(tidyr)
+```
+
+```{r}
+par(mfrow=c(1,3))
+pie(table(germ$ALC_USE),labels=c("Past Month","Past Month-Year","1 Year+","Never"),main="\n\n\n\n\n\n\n\n\n\nGerman Use of Alcohol")
+pie(table(germ$TOB_USE),labels=c("Regular Use","Occasional Use","Never"),main="\n\n\n\n\n\n\n\n\n\nGerman Use of Tobacco")
+pie(table(germ$MDMA_USE),labels=c("Never"," ","At Least \nOnce"," "),main="\n\n\n\n\n\n\n\n\n\nGerman Use of Ecstasy")
+```
+
+```{r}
+ggplot(germ, aes(x = ALC_USE, y = DEM_EDU)) + geom_point(position="jitter")+xlab("Alcohol Use")+ylab("Education Level")+ scale_x_discrete(limits=c("Past Month","Past Month-Year","After the Past Year","Never"))+ggtitle("Education Level vs Alcohol Use In Germany") +theme_bw()
+```
+
+```{r}
+ggplot(germ, aes(x = MDMA_USE, y = DEM_EDU)) + geom_point(position="jitter")+xlab("Ecstasy Use")+ylab("Education Level")+ scale_x_discrete(limits=c("Never","In the Past Week","In the Past Month", "In the Past Year", "At Least Once per Lifetime"))+ggtitle("Education Level vs Ecstasy Use In Germany") +theme_bw()
+```
+
+```{r}
+#ALC
+ALC_plot = ggplot(data = germ, aes(x = DEM_EDU, fill = factor(ALC_USE))) + 
+        geom_bar(position = "fill") + xlab("\nEducation Level") +
+    ylab("Counts\n") + theme_bw()
+
+
+ALC_plot + scale_fill_discrete(labels = c("Not longer than 30 days", "Between 1 and 12 months", "Longer than 1 year", "Have never drunk alcohol")) + labs(fill = "Alcohol Usage")
+
+
+#TOB
+TOB_plot = ggplot(data = germ, aes(x = DEM_EDU, fill = factor(TOB_USE))) + 
+         geom_bar(position = "fill") + xlab("\nEducation Level") +
+    ylab("Counts\n") + theme_bw()
+
+TOB_plot + scale_fill_discrete(labels = c("Yes, regularly", "Yes, occasionally", "No")) + labs(fill = "Tobacco Usage")
+
+
+
+#MDMA
+MDMA_plot = ggplot(data = germ, aes(x = DEM_EDU, fill = factor(MDMA_USE))) + 
+        geom_bar(position = "fill") + xlab("\nEducation Level") +
+    ylab("Counts\n") + theme_bw()
+
+ MDMA_plot + scale_fill_discrete(labels = c("No", "Yes, within the last week", "Yes, within the last 30 days", "Yes, within the last 12 months", "Yes, during my lifetime")) + labs(fill = "Ecstasy Usage")
+
+```
